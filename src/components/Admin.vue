@@ -1,49 +1,32 @@
 <template>
-  <div>
-    <div style="display:flex;">
-      <div style="width:15%;">
-        <Menu></Menu>
-      </div>
-      <div style="width:85%;">
-        <div class="headline">
-          <div class="text-right">
-            <img :src='imgUrl' class="img" @click='showUserData'>
-            <div class="position-name" v-if="showUser">
-              <p>个人设置</p>
-              <p>退出账号</p>
+    <v-app>
+      <v-layout>
+       <v-flex xs2 sm2 md2 lg2>
+          <Menu></Menu>
+        </v-flex>
+        <v-flex xs10 sm10 md10 lg10>
+          <div class="headline" style='background: rgba(153, 153, 153, 1);'>
+            <div class="text-right">
+                <img :src="avatar" class="img">
             </div>
           </div>
-        </div>
-        <v-container fluid @click="showUser = false">
-          <v-layout style="display:flex;justify-content:space-between;">
-            <h1>账号管理</h1>
-            <div>
-              <!-- <v-select :items="selectList" v-model="selectValue" solo></v-select> -->
-              <v-text-field label="搜索" prepend-inner-icon="search" v-model="inputValue" solo value="inputValue"></v-text-field>       
-            </div>
-          </v-layout>
-          <v-layout style="border:1px solid red;height:500px;">
-            <v-data-table
-              :headers="headers"
-              :items="desserts"
-              class="elevation-1"
-            >
-              <template v-slot:items="props">
-                <td>{{ props.item.name }}</td>
-                <td class="text-xs-right">{{ props.item.calories }}</td>
-                <td class="text-xs-right">{{ props.item.fat }}</td>
-                <td class="text-xs-right">{{ props.item.carbs }}</td>
-                <td class="text-xs-right">{{ props.item.protein }}</td>
-                <td class="text-xs-right">{{ props.item.iron }}</td>
-              </template>
-            </v-data-table>
-          </v-layout>
-    </v-container>
-    </div>
-
-      </div>
-    </div>
-  </div>
+          <!-- 表格 -->
+          <v-data-table
+            :headers="headers"
+            :items="desserts"
+            class="elevation-1"
+          >
+            <template v-slot:items="props">
+              <td>{{ props.item.name }}</td>
+              <td class="text-xs-right">{{ props.item.calories }}</td>
+              <td class="text-xs-right">{{ props.item.fat }}</td>
+              <td class="text-xs-right">{{ props.item.carbs }}</td>
+              <td class="text-xs-right">{{ props.item.protein }}</td>
+            </template>
+          </v-data-table>
+        </v-flex>
+      </v-layout>
+    </v-app>
 </template>
 
 <script>
@@ -52,58 +35,80 @@ export default {
   name: 'Admin',
   data () {
     return {
-      imgUrl: require('../assets/user.jpg'),
-      showUser: false,
-      selectList: ['昵称', 'ID', '手机号'],
-      selectValue: 'ID',
-      inputValue: '',
+      page: 1,
+      avatar: require('../assets/user.jpg'),
+      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      expand: false,
       headers: [
         {
-          text: 'ID',
+          text: 'Dessert (100g serving)',
           align: 'left',
           sortable: false,
           value: 'name'
         },
-        { text: '头像', value: 'calories' },
-        { text: '昵称', value: 'fat' },
-        { text: '用户权限', value: 'carbs' },
-        { text: '邮箱', value: 'protein' },
-        { text: '手机号', value: 'iron' }
+        { text: 'Calories', value: 'calories' },
+        { text: 'Fat (g)', value: 'fat' },
+        { text: 'Carbs (g)', value: 'carbs' },
+        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Iron (%)', value: 'iron' },
+        { text: 'Actions', value: '', sortable: false }
       ],
-      desserts: [
-        {
-          name: '1234567',
-          calories: 159,
-          fat: '图书',
-          carbs: '普通用户',
-          protein: '1234***78@163.com',
-          iron: '1234****89'
-        },
-        {
-          name: '1234567',
-          calories: 237,
-          fat: '图书',
-          carbs: '普通用户',
-          protein: '1234***78@163.com',
-          iron: '1234****89'
-        },
-        {
-          name: '1234567',
-          calories: 262,
-          fat: '图书',
-          carbs: '普通用户',
-          protein: '1234***78@163.com',
-          iron: '1234****89'
-        }
-      ]
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        name: '',
+        calories: 0,
+        fat: 0,
+        carbs: 0,
+        protein: 0
+      },
+      defaultItem: {
+        name: '',
+        calories: 0,
+        fat: 0,
+        carbs: 0,
+        protein: 0
+      }
     }
   },
   components: {
     Menu
   },
+  created () {
+    this.initialize()
+  },
   methods: {
-    showUserData () {
-      this.showUser = true
+    initialize () {
+      this.desserts = [
+        {
+          name: 'Frozen Yogurt',
+          calories: 159,
+          fat: 6.0,
+          carbs: 24,
+          protein: 4.0
+        },
+        {
+          name: 'Cupcake',
+          calories: 305,
+          fat: 3.7,
+          carbs: 67,
+          protein: 4.3
+        },
+        {
+          name: 'Lollipop',
+          calories: 392,
+          fat: 0.2,
+          carbs: 98,
+          protein: 0
+        },
+        {
+          name: 'Honeycomb',
+          calories: 408,
+          fat: 3.2,
+          carbs: 87,
+          protein: 6.5
+        }
+      ]
     }
   }
 }

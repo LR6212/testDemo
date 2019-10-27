@@ -9,6 +9,13 @@
             <v-form>
               <v-text-field label="账户" solo prepend-inner-icon="person" placeholder="账户" type="text"></v-text-field>
               <v-text-field label="密码" solo prepend-inner-icon="lock" placeholder="密码" type="password"></v-text-field>
+               <v-text-field
+                label="账号"
+                single-line
+                dense
+                outlined
+                prepend-inner-icon="person"
+              ></v-text-field>
               <v-btn block class="btn-style" @click="login()">登录</v-btn>
           </v-form>
           </v-card-text>
