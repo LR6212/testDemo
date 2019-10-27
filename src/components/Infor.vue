@@ -24,11 +24,14 @@
                     </v-stepper-header>
                     <v-stepper-items>
                         <div style='display:flex;justify-content:space-between;'>
-                            <h4 style='margin:10px;font-size:14px;'>编辑资讯</h4>
+                            <h4 style='margin:10px;font-size:14px;' v-if='e1 === 1'>编辑资讯</h4>
+                            <h4 style='margin:10px;font-size:14px;' v-else-if='e1 === 2'>编辑概要</h4>
+                            <h4 style='margin:10px;font-size:14px;' v-else-if='e1 === 3'>编辑图谱</h4>
+                            <h4 style='margin:10px;font-size:14px;' v-else>app效果预览</h4>
                             <v-btn
-                            color="primary"
-                            @click="e1 = 2"
-                            style='height:25px;line-height:25px;margin:10px;'
+                                color="primary"
+                                @click="next()"
+                                style='height:25px;line-height:25px;margin:10px;'
                             >
                             下一步
                             </v-btn>
@@ -91,7 +94,42 @@
                                      </div>
                                 </div>
                             </div>
-
+                        </v-stepper-content>
+                        <v-stepper-content step="2">
+                            <div>
+                                <div id="toolbar-containers" style='width:80%;margin:auto;'>
+                                    <span class="ql-formats">
+                                        <select class="ql-font"></select>
+                                        <select class="ql-size"></select>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-bold"></button>
+                                        <button class="ql-italic"></button>
+                                        <button class="ql-underline"></button>
+                                        <button class="ql-strike"></button>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <select class="ql-color"></select>
+                                        <select class="ql-background"></select>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-list" value="ordered"></button>
+                                        <button class="ql-list" value="bullet"></button>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-direction" value="rtl"></button>
+                                        <select class="ql-align"></select>
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-link"></button>
+                                        <button class="ql-image"></button>
+                                    </span>
+                                </div>
+                                <v-divider></v-divider>
+                                <v-card style="width:80%;margin:20px auto;">
+                                    <div id="editors" class="quill"></div>
+                                </v-card>
+                            </div>
                         </v-stepper-content>
                     </v-stepper-items>
                 </v-stepper>
@@ -110,7 +148,7 @@ export default {
   name: 'Infor',
   data () {
     return {
-      e1: 0,
+      e1: 1,
       quill: null,
       avatar: require('../assets/user.jpg'),
       outputHTML: '',
@@ -128,7 +166,20 @@ export default {
       placeholder: 'Compose an epic...',
       theme: 'snow'
     })
+    this.quill = new Quill('#editors', {
+      modules: {
+        toolbar: '#toolbar-containers'
+      },
+      placeholder: 'Compose an epic...',
+      theme: 'snow'
+    })
     this.outputHTML = this.quill.root.innerHTML
+  },
+  methods: {
+    next () {
+      this.e1 += 1
+      console.log(this.e1)
+    }
   }
 }
  
@@ -142,7 +193,6 @@ export default {
 .img {
     width: 44px;
     height: 44px;
-    /* border: 1px solid red; */
     border-radius: 50%;
     position: absolute;
     top: 8px;
@@ -165,7 +215,6 @@ export default {
 } 
 .ql-toolbar.ql-snow {
     border: none;
-    /* border-right: 1px solid #ccc; */ 
 }
 .v-stepper__content {
     padding: 0;
